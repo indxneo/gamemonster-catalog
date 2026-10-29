@@ -1,0 +1,17 @@
+// GameMonster's Cloudflare Worker. Today it only serves the catalog updates that
+// tools/publish-catalog.ts writes to data/site/ (catalog/v1/manifest.json + content-hashed files),
+// as static assets: free, unlimited requests, 25 MiB per file. The live-IGDB proxy (BLUEPRINT §13)
+// will add a `main` script here later.
+//
+// Deploy (from the repo root, after node tools/publish-catalog.ts):
+//   cd proxy && npx wrangler deploy
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "gamemonster",
+  "compatibility_date": "2026-09-22",
+  "assets": {
+    "directory": "../data/site",
+    // A missing file is a plain 404; the app treats it as a failed check and keeps its catalog.
+    "not_found_handling": "none"
+  }
+}

@@ -1,0 +1,62 @@
+# Publishes GameMonster's game list (BLUEPRINT D101). Runs every day; publishes when the live list
+# is 6.5 days old, so a day lost to GitHub's load or a failed download is retried the next day.
+# Only a schedule or the "Run workflow" button can start it — never a pull request — so the secrets
+# below can't reach anyone else's code.
+name: Catalog
+
+on:
+  schedule:
+    - cron: "17 8 * * *" # 08:17 UTC daily: after IGDB's daily dumps, off the busy top of the hour
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "normal: publish only when the list is a week old · force: publish now · dry-run: build and check, don't publish"
+        type: choice
+        options: [normal, force, dry-run]
+        default: normal
+
+concurrency:
+  group: catalog
+  cancel-in-progress: false
+
+permissions:
+  contents: write # status.json (a commit per published list keeps the repo active)
+  actions: write # re-enable this workflow, so 60 quiet days can't switch the schedule off
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+
+      - name: Build and publish the game list
+        env:
+          CATALOG_MODE: ${{ inputs.mode || 'normal' }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bash tools/catalog-cloud-job.sh
+
+      - name: Record the live list
+        if: success()
+        run: |
+          curl -fsS https://gamemonster.indxneo.workers.dev/catalog/v1/manifest.json \
+            | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const m=JSON.parse(s);console.log(JSON.stringify({live:m.version,generatedAt:m.generatedAt,files:m.files.length},null,2))})' \
+            > status.json
+          if ! git diff --quiet -- status.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Live: $(node -p 'require("./status.json").live')" -- status.json
+            git push
+          fi
+
+      - name: Keep the schedule on
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/catalog.yml/enable"

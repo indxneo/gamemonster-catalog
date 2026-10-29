@@ -1,0 +1,26 @@
+{
+  "_comment": "Curated display names and families for platforms. IGDB abbreviations are inconsistent (e.g. 'SFAM', 'neogeoaes'); collectors see these everywhere.",
+  "shortNames": {
+    "18": "NES", "99": "Famicom", "51": "Famicom Disk System", "19": "SNES", "58": "Super Famicom",
+    "4": "N64", "416": "64DD", "21": "GameCube", "5": "Wii", "41": "Wii U", "130": "Switch", "508": "Switch 2",
+    "33": "Game Boy", "22": "Game Boy Color", "24": "Game Boy Advance", "20": "Nintendo DS", "159": "DSi",
+    "37": "3DS", "137": "New 3DS", "87": "Virtual Boy", "307": "Game & Watch", "306": "Satellaview",
+    "7": "PS1", "8": "PS2", "9": "PS3", "48": "PS4", "167": "PS5", "38": "PSP", "46": "PS Vita",
+    "165": "PS VR", "390": "PS VR2", "441": "PocketStation",
+    "11": "Xbox", "12": "Xbox 360", "49": "Xbox One", "169": "Xbox Series X|S",
+    "29": "Genesis / Mega Drive", "32": "Saturn", "23": "Dreamcast", "64": "Master System", "35": "Game Gear",
+    "78": "Sega CD", "30": "32X", "84": "SG-1000", "339": "Sega Pico",
+    "86": "TurboGrafx-16 / PC Engine", "128": "SuperGrafx", "274": "PC-FX",
+    "80": "Neo Geo AES", "136": "Neo Geo CD", "119": "Neo Geo Pocket", "120": "Neo Geo Pocket Color",
+    "59": "Atari 2600", "66": "Atari 5200", "60": "Atari 7800", "61": "Atari Lynx", "62": "Atari Jaguar", "410": "Jaguar CD",
+    "50": "3DO", "68": "ColecoVision", "67": "Intellivision", "70": "Vectrex", "117": "CD-i", "88": "Odyssey",
+    "57": "WonderSwan", "123": "WonderSwan Color", "124": "SwanCrystal", "114": "Amiga CD32",
+    "411": "Handheld LCD", "381": "Playdate", "309": "Evercade", "72": "Ouya"
+  },
+  "families": {
+    "59": "Atari", "66": "Atari", "60": "Atari", "61": "Atari", "62": "Atari", "410": "Atari",
+    "86": "NEC", "128": "NEC", "274": "NEC",
+    "80": "SNK", "136": "SNK", "119": "SNK", "120": "SNK",
+    "57": "Bandai", "123": "Bandai", "124": "Bandai"
+  }
+}

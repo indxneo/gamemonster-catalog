@@ -1,0 +1,6 @@
+.dev.vars
+.igdb-token.json
+.wrangler/
+node_modules/
+data/
+.DS_Store
