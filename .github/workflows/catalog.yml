@@ -51,7 +51,8 @@ jobs:
           if [[ -n "$(git status --porcelain -- status.json)" ]]; then # new or changed
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "Live: $(node -p 'require("./status.json").live')" -- status.json
+            git add status.json
+            git commit -m "Live: $(node -p 'require("./status.json").live')"
             git push
           fi
 
