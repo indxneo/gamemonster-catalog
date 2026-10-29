@@ -48,7 +48,7 @@ jobs:
           curl -fsS https://gamemonster.indxneo.workers.dev/catalog/v1/manifest.json \
             | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const m=JSON.parse(s);console.log(JSON.stringify({live:m.version,generatedAt:m.generatedAt,files:m.files.length},null,2))})' \
             > status.json
-          if ! git diff --quiet -- status.json; then
+          if [[ -n "$(git status --porcelain -- status.json)" ]]; then # new or changed
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Live: $(node -p 'require("./status.json").live')" -- status.json
